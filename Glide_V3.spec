@@ -3,23 +3,32 @@ Summary(pl):	¶rodowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
 Name:		Glide_V3
 Version:	2.60
 Release:	16
+License:	3DFX GLIDE Source Code General Public License
+Vendor:		3Dfx Interactive Inc.
 Group:		Libraries
 Group(de):	Libraries
 Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
-Copyright:	3DFX GLIDE Source Code General Public License
-URL:		http://www.3dfx.com	
+Group(pt_BR):	Bibliotecas
+Group(ru):	‚…¬Ã…œ‘≈À…
+Group(uk):	‚¶¬Ã¶œ‘≈À…
 Source0:	GlideV3.tar.gz
-Vendor:		3Dfx Interactive Inc.
 Icon:		3dfx.gif
+URL:		http://www.3dfx.com/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description 
 This package now includes both Glide2x and Glide3x. Glide is a
-lowlevel API for accessing 3dfx Interactive's Voodoo Hardware. This
+lowlevel API for accessing 3Dfx Interactive's Voodoo Hardware. This
 version of Glide supports Voodoo Banshee and Voodoo3 based 3D
 acclerators.
+
+%description -l pl
+Ten pakiet zawiera zarÛwno Glide2x jak i Glide3x. Glide jest
+niskopoziomowym API do dostÍpu do sprzÍtu Voodoo firmu 3Dfx
+Interactive. Ta wersja Glide obs≥uguje akceleratory 3D oparte na
+Voodoo Banshee i Voodoo3.
 
 %package -n Glide_SDK
 Summary:	Development libraries for Glide 2.x
@@ -27,13 +36,22 @@ Summary(pl):	CzÍ∂Ê Glide 2.x przeznaczona dla programistÛw
 Version:	2.2
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Ú¡⁄“¡¬œ‘À¡/‚…¬Ã…œ‘≈À…
+Group(uk):	Úœ⁄“œ¬À¡/‚¶¬Ã¶œ‘≈À…
 
 %description -n Glide_SDK
 This package includes the header files, documentation, and test files
 necessary for developing applications that use any of the 3D
-acceleratos in the 3Dfx Interactive Voodoo line.
+accelerators in the 3Dfx Interactive Voodoo line.
+
+%description -n Glide_SDK -l pl
+Ten pakiet zawiera pliki nag≥Ûwkowe, dokumentacjÍ i pliki testowe
+potrzebne do tworzenia aplikacji korzystaj±cych z akceleratorÛw 3D
+serii 3Dfx Interactive Voodoo.
 
 %prep
 %setup -q -n GlideV3
