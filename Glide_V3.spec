@@ -1,11 +1,16 @@
 Summary:	Glide runtime for 3Dfx Voodoo Banshee and Voodoo3 boards
+Summary(pl):	¦rodowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
 Name:		Glide_V3
 Version:	2.60
 Release:	16
 Group:		Libraries
+Group(de):	Libraries
+Group(es):	Bibliotecas
+Group(fr):	Librairies
+Group(pl):	Biblioteki
 Copyright:	3DFX GLIDE Source Code General Public License
 URL:		http://www.3dfx.com	
-Source:		GlideV3.tar.gz
+Source0:	GlideV3.tar.gz
 Vendor:		3Dfx Interactive Inc.
 Icon:		3dfx.gif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -18,8 +23,12 @@ acclerators.
 
 %package -n Glide_SDK
 Summary:	Development libraries for Glide 2.x
+Summary(pl):	Czê¶æ Glide 2.x przeznaczona dla programistów
 Version:	2.2
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
+Group(fr):	Development/Librairies
+Group(pl):	Programowanie/Biblioteki
 
 %description -n Glide_SDK
 This package includes the header files, documentation, and test files
@@ -31,8 +40,8 @@ acceleratos in the 3Dfx Interactive Voodoo line.
 chmod +x swlibs/include/make/ostype
 
 %build
-%{__make} V3_NODRI CNODEBUG="$RPM_OPT_FLAGS -fomit-frame-pointer \
-	-funroll-loops -fexpensive-optimizations -ffast-math -DBIG_OPT"
+%{__make} V3_NODRI CNODEBUG="%{rpmcflags} %{!?debug:-fomit-frame-pointer}\
+	%{!?debug:-funroll-loops -fexpensive-optimizations -ffast-math -DBIG_OPT}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -45,41 +54,41 @@ install -d $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/{lib,cmd,examples}
 ######################################################################
 
 # Install the native libraries normally
-install -s glide2x/h3/lib/libglide.so.2.60 $RPM_BUILD_ROOT%{_libdir}
+install glide2x/h3/lib/libglide.so.2.60 $RPM_BUILD_ROOT%{_libdir}
 
 # Create symlinks
-ln -s libglide.so.2 $RPM_BUILD_ROOT%{_libdir}/libglide.so
+ln -sf libglide.so.2 $RPM_BUILD_ROOT%{_libdir}/libglide.so
 
 # Create a compatibility link for the old name
-ln -s libglide.so.2.60 $RPM_BUILD_ROOT%{_libdir}/libglide2x.so
-ln -s libglide2x.so $RPM_BUILD_ROOT%{_libdir}/libglide2x.so.2
+ln -sf libglide.so.2.60 $RPM_BUILD_ROOT%{_libdir}/libglide2x.so
+ln -sf libglide2x.so $RPM_BUILD_ROOT%{_libdir}/libglide2x.so.2
 
 ######################################################################
 # Install the Glide3X libraries
 ######################################################################
-install -s glide3x/h3/lib/libglide3.so.3.10 $RPM_BUILD_ROOT%{_libdir}
+install glide3x/h3/lib/libglide3.so.3.10 $RPM_BUILD_ROOT%{_libdir}
 rm -f $RPM_BUILD_ROOT%{_libdir}/libglide3x.so
 
 # Create symlinks
-ln -s libglide3.so.3 $RPM_BUILD_ROOT%{_libdir}/libglide3.so
+ln -sf libglide3.so.3 $RPM_BUILD_ROOT%{_libdir}/libglide3.so
 
 # Create a compatibility link for the old name
-ln -s libglide3.so.3 $RPM_BUILD_ROOT%{_libdir}/libglide3x.so
-ln -s libglide3x.so $RPM_BUILD_ROOT%{_libdir}/libglide3x.so.3
+ln -sf libglide3.so.3 $RPM_BUILD_ROOT%{_libdir}/libglide3x.so
+ln -sf libglide3x.so $RPM_BUILD_ROOT%{_libdir}/libglide3x.so.3
 
 ######################################################################
 # Install Texus
 ######################################################################
-install -s swlibs/lib/libtexus.so.1.1 $RPM_BUILD_ROOT%{_libdir}
+install swlibs/lib/libtexus.so.1.1 $RPM_BUILD_ROOT%{_libdir}
 
-ln -s libtexus.so.1.1 $RPM_BUILD_ROOT%{_libdir}/libtexus.so.1
-ln -s libtexus.so.1 $RPM_BUILD_ROOT%{_libdir}/libtexus.so
+ln -sf libtexus.so.1.1 $RPM_BUILD_ROOT%{_libdir}/libtexus.so.1
+ln -sf libtexus.so.1 $RPM_BUILD_ROOT%{_libdir}/libtexus.so
 
-install -s swlibs/bin/texus $RPM_BUILD_ROOT%{_bindir}
+install swlibs/bin/texus $RPM_BUILD_ROOT%{_bindir}
 
-install -s glide2x/h3/glide/tests/test00 $RPM_BUILD_ROOT%{_bindir}/test3Dfx
-install -s glide2x/h3/glide/tests/test00 $RPM_BUILD_ROOT%{_bindir}/testGlide2x
-install -s glide3x/h3/glide3/tests/test00 $RPM_BUILD_ROOT%{_bindir}/testGlide3x
+install glide2x/h3/glide/tests/test00 $RPM_BUILD_ROOT%{_bindir}/test3Dfx
+install glide2x/h3/glide/tests/test00 $RPM_BUILD_ROOT%{_bindir}/testGlide2x
+install glide3x/h3/glide3/tests/test00 $RPM_BUILD_ROOT%{_bindir}/testGlide3x
 
 ######################################################################
 # Install the Glide2x SDK material
