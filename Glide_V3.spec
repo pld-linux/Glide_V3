@@ -48,7 +48,8 @@ serii 3Dfx Interactive Voodoo.
 chmod +x swlibs/include/make/ostype
 
 %build
-%{__make} V3_NODRI CNODEBUG="%{rpmcflags} %{!?debug:-fomit-frame-pointer}\
+%{__make} V3_NODRI \
+	CNODEBUG="%{rpmcflags} %{!?debug:-fomit-frame-pointer}\
 	%{!?debug:-funroll-loops -fexpensive-optimizations -ffast-math -DBIG_OPT}"
 
 %install
@@ -113,21 +114,21 @@ install swlibs/include/linutil.h $RPM_BUILD_ROOT%{_includedir}/glide
 install swlibs/include/texus.h $RPM_BUILD_ROOT%{_includedir}/glide
 
 # Install the examples and their source
-install glide2x/h3/glide/tests/makefile.distrib $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests/makefile
-install glide2x/h3/glide/tests/*.3df $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests
-install glide2x/h3/glide/tests/test??.c $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests
-install glide2x/h3/glide/tests/tldata.inc $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests
-install glide2x/h3/glide/tests/tlib.[ch] $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests
+install glide2x/h3/glide/tests/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide/tests/makefile
+install glide2x/h3/glide/tests/*.3df $RPM_BUILD_ROOT%{_examplesdir}/glide/tests
+install glide2x/h3/glide/tests/test??.c $RPM_BUILD_ROOT%{_examplesdir}/glide/tests
+install glide2x/h3/glide/tests/tldata.inc $RPM_BUILD_ROOT%{_examplesdir}/glide/tests
+install glide2x/h3/glide/tests/tlib.[ch] $RPM_BUILD_ROOT%{_examplesdir}/glide/tests
 
 # Install the Texus source
-install swlibs/texus/makefile.distrib $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/makefile
-install swlibs/texus/lib/makefile.distrib $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/lib/makefile
-install swlibs/texus/cmd/makefile.distrib $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/cmd/makefile
-install swlibs/texus/examples/makefile.distrib $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/examples/makefile
-install swlibs/texus/lib/*.c $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/lib
-install swlibs/texus/lib/texusint.h $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/lib
-install swlibs/texus/cmd/*.c $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/cmd
-install swlibs/texus/examples/*.c $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/examples
+install swlibs/texus/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide/texus/makefile
+install swlibs/texus/lib/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide/texus/lib/makefile
+install swlibs/texus/cmd/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide/texus/cmd/makefile
+install swlibs/texus/examples/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide/texus/examples/makefile
+install swlibs/texus/lib/*.c $RPM_BUILD_ROOT%{_examplesdir}/glide/texus/lib
+install swlibs/texus/lib/texusint.h $RPM_BUILD_ROOT%{_examplesdir}/glide/texus/lib
+install swlibs/texus/cmd/*.c $RPM_BUILD_ROOT%{_examplesdir}/glide/texus/cmd
+install swlibs/texus/examples/*.c $RPM_BUILD_ROOT%{_examplesdir}/glide/texus/examples
 
 ######################################################################
 # Install the Glide3x SDK material
@@ -142,11 +143,11 @@ install swlibs/include/linutil.h $RPM_BUILD_ROOT%{_includedir}/glide3
 install swlibs/include/texus.h $RPM_BUILD_ROOT%{_includedir}/glide3
 
 # Install the examples and their source
-install glide3x/h3/glide3/tests/makefile.distrib $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests3x/makefile
-install glide3x/h3/glide3/tests/*.3df $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests3x
-install glide3x/h3/glide3/tests/test??.c $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests3x
-install glide3x/h3/glide3/tests/tldata.inc $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests3x
-install glide3x/h3/glide3/tests/tlib.[ch] $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests3x
+install glide3x/h3/glide3/tests/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide/tests3x/makefile
+install glide3x/h3/glide3/tests/*.3df $RPM_BUILD_ROOT%{_examplesdir}/glide/tests3x
+install glide3x/h3/glide3/tests/test??.c $RPM_BUILD_ROOT%{_examplesdir}/glide/tests3x
+install glide3x/h3/glide3/tests/tldata.inc $RPM_BUILD_ROOT%{_examplesdir}/glide/tests3x
+install glide3x/h3/glide3/tests/tlib.[ch] $RPM_BUILD_ROOT%{_examplesdir}/glide/tests3x
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -175,6 +176,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -n Glide_SDK
 %defattr(644,root,root,755)
 %doc docs2x/*.pdf docs3x/*.pdf
-%{_prefix}/src/examples/glide
+%{_examplesdir}/glide
 %{_includedir}/glide
 %{_includedir}/glide3
