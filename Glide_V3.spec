@@ -144,8 +144,6 @@ install glide3x/h3/glide3/tests/test??.c $RPM_BUILD_ROOT%{_prefix}/src/examples/
 install glide3x/h3/glide3/tests/tldata.inc $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests3x
 install glide3x/h3/glide3/tests/tlib.[ch] $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/tests3x
 
-gzip -9nf glide_license.txt
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -154,7 +152,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc glide_license.txt.gz
+%doc glide_license.txt
 %attr(755,root,root) %{_bindir}/texus
 %attr(755,root,root) %{_bindir}/test3Dfx
 %attr(755,root,root) %{_bindir}/testGlide3x
