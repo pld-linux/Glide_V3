@@ -31,7 +31,7 @@ acceleratos in the 3Dfx Interactive Voodoo line.
 chmod +x swlibs/include/make/ostype
 
 %build
-make V3_NODRI CNODEBUG="$RPM_OPT_FLAGS -fomit-frame-pointer \
+%{__make} V3_NODRI CNODEBUG="$RPM_OPT_FLAGS -fomit-frame-pointer \
 	-funroll-loops -fexpensive-optimizations -ffast-math -DBIG_OPT"
 
 %install
