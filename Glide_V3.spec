@@ -6,13 +6,6 @@ Release:	17
 License:	3DFX GLIDE Source Code General Public License
 Vendor:		3Dfx Interactive Inc.
 Group:		Libraries
-Group(de):	Libraries
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(pl):	Biblioteki
-Group(pt_BR):	Bibliotecas
-Group(ru):	Библиотеки
-Group(uk):	Б╕бл╕отеки
 Source0:	GlideV3.tar.gz
 Icon:		3dfx.gif
 URL:		http://www.3dfx.com/
@@ -35,13 +28,6 @@ Summary:	Development libraries for Glide 2.x
 Summary(pl):	CzЙ╤Ф Glide 2.x przeznaczona dla programistСw
 Version:	2.2
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 
 %description -n Glide_SDK
 This package includes the header files, documentation, and test files
