@@ -9,6 +9,9 @@ Group:		Libraries
 Source0:	GlideV3.tar.gz
 Icon:		3dfx.gif
 URL:		http://www.3dfx.com/
+%ifarch %{ix86}
+BuildRequires:	/usr/bin/gasp
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description 
