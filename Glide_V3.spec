@@ -2,7 +2,7 @@ Summary:	Glide runtime for 3Dfx Voodoo Banshee and Voodoo3 boards
 Summary(pl):	¦rodowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
 Name:		Glide_V3
 Version:	2.60
-Release:	16
+Release:	17
 License:	3DFX GLIDE Source Code General Public License
 Vendor:		3Dfx Interactive Inc.
 Group:		Libraries
@@ -63,9 +63,9 @@ chmod +x swlibs/include/make/ostype
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_includedir}/{glide,glide3}}
-install -d $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/{tests,tests3x}
-install -d $RPM_BUILD_ROOT%{_prefix}/src/examples/glide/texus/{lib,cmd,examples}
+install -d $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_includedir}/{glide,glide3}} \
+	$RPM_BUILD_ROOT%{_examplesdir}/glide/{tests,tests3x} \
+	$RPM_BUILD_ROOT%{_examplesdir}/glide/texus/{lib,cmd,examples}
 
 ######################################################################
 # Install the Glide2x libraries
@@ -163,7 +163,7 @@ gzip -9nf glide_license.txt
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -p /sbin/ldconfig
+%post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
