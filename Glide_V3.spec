@@ -19,7 +19,7 @@ acclerators.
 
 %description -l pl
 Ten pakiet zawiera zarówno Glide2x jak i Glide3x. Glide jest
-niskopoziomowym API do dostêpu do sprzêtu Voodoo firmu 3Dfx
+niskopoziomowym API do dostêpu do sprzêtu Voodoo firmy 3Dfx
 Interactive. Ta wersja Glide obs³uguje akceleratory 3D oparte na
 Voodoo Banshee i Voodoo3.
 
