@@ -15,7 +15,7 @@ BuildRequires:	/usr/bin/gasp
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%description 
+%description
 This package now includes both Glide2x and Glide3x. Glide is a
 lowlevel API for accessing 3Dfx Interactive's Voodoo Hardware. This
 version of Glide supports Voodoo Banshee and Voodoo3 based 3D
