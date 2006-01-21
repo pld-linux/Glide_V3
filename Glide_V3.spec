@@ -8,7 +8,6 @@ Vendor:		3Dfx Interactive Inc.
 Group:		Libraries
 Source0:	GlideV3.tar.gz
 # Source0-md5:	9c690dd7b36bbe007806ac62b1366a3b
-Icon:		3dfx.gif
 URL:		http://www.3dfx.com/
 %ifarch %{ix86}
 BuildRequires:	/usr/bin/gasp
