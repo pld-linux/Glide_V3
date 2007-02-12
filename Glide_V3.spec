@@ -1,5 +1,5 @@
 Summary:	Glide runtime for 3Dfx Voodoo Banshee and Voodoo3 boards
-Summary(pl.UTF-8):   Środowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
+Summary(pl.UTF-8):	Środowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
 Name:		Glide_V3
 Version:	2.60
 Release:	17
@@ -28,7 +28,7 @@ Voodoo Banshee i Voodoo3.
 
 %package -n Glide_SDK
 Summary:	Development libraries for Glide 2.x
-Summary(pl.UTF-8):   Część Glide 2.x przeznaczona dla programistów
+Summary(pl.UTF-8):	Część Glide 2.x przeznaczona dla programistów
 Version:	2.2
 Group:		Development/Libraries
 
