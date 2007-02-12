@@ -1,5 +1,5 @@
 Summary:	Glide runtime for 3Dfx Voodoo Banshee and Voodoo3 boards
-Summary(pl):	¦rodowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
+Summary(pl.UTF-8):   Åšrodowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
 Name:		Glide_V3
 Version:	2.60
 Release:	17
@@ -20,15 +20,15 @@ lowlevel API for accessing 3Dfx Interactive's Voodoo Hardware. This
 version of Glide supports Voodoo Banshee and Voodoo3 based 3D
 acclerators.
 
-%description -l pl
-Ten pakiet zawiera zarówno Glide2x jak i Glide3x. Glide jest
-niskopoziomowym API do dostêpu do sprzêtu Voodoo firmy 3Dfx
-Interactive. Ta wersja Glide obs³uguje akceleratory 3D oparte na
+%description -l pl.UTF-8
+Ten pakiet zawiera zarÃ³wno Glide2x jak i Glide3x. Glide jest
+niskopoziomowym API do dostÄ™pu do sprzÄ™tu Voodoo firmy 3Dfx
+Interactive. Ta wersja Glide obsÅ‚uguje akceleratory 3D oparte na
 Voodoo Banshee i Voodoo3.
 
 %package -n Glide_SDK
 Summary:	Development libraries for Glide 2.x
-Summary(pl):	Czê¶æ Glide 2.x przeznaczona dla programistów
+Summary(pl.UTF-8):   CzÄ™Å›Ä‡ Glide 2.x przeznaczona dla programistÃ³w
 Version:	2.2
 Group:		Development/Libraries
 
@@ -37,9 +37,9 @@ This package includes the header files, documentation, and test files
 necessary for developing applications that use any of the 3D
 accelerators in the 3Dfx Interactive Voodoo line.
 
-%description -n Glide_SDK -l pl
-Ten pakiet zawiera pliki nag³ówkowe, dokumentacjê i pliki testowe
-potrzebne do tworzenia aplikacji korzystaj±cych z akceleratorów 3D
+%description -n Glide_SDK -l pl.UTF-8
+Ten pakiet zawiera pliki nagÅ‚Ã³wkowe, dokumentacjÄ™ i pliki testowe
+potrzebne do tworzenia aplikacji korzystajÄ…cych z akceleratorÃ³w 3D
 serii 3Dfx Interactive Voodoo.
 
 %prep
