@@ -1,0 +1,584 @@
+--- GlideV3.orig/glide2x/cvg/glide/tests/display.c
++++ GlideV3/glide2x/cvg/glide/tests/display.c
+@@ -65,6 +65,10 @@ static const char *sourceFormatString[] 
+     "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ int main( int argc, char **argv)
+ {
+@@ -91,11 +95,6 @@ int main( int argc, char **argv)
+     static FxU32 imageWidth;
+     static FxU32 imageHeight;
+ 
+-    static void imageConvert( void *dst, 
+-                              void *src,
+-                              GrLfbSrcFmt_t format, 
+-                              FxU32 *bpp );
+-
+     srcfname[0] = 0;
+     dstfname[0] = 0;
+ 
+--- GlideV3.orig/glide2x/cvg/glide/tests/test26.c
++++ GlideV3/glide2x/cvg/glide/tests/test26.c
+@@ -57,6 +57,10 @@ static const char *sourceFormatString[] 
+   "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ int main( int argc, char **argv) {
+   char match; 
+@@ -80,11 +84,6 @@ int main( int argc, char **argv) {
+   static FxU32 imageWidth;
+   static FxU32 imageHeight;
+ 
+-  static void imageConvert( void *dst, 
+-                            void *src,
+-                            GrLfbSrcFmt_t format, 
+-                            FxU32 *bpp );
+-
+   /* Process Command Line Arguments */
+   while( (rv = tlGetOpt( argc, argv, "bdnr", &match, &remArgs )) ) {
+     if ( rv == -1 ) {
+--- GlideV3.orig/glide2x/h3/glide/src/xdraw2.inc.S
++++ GlideV3/glide2x/h3/glide/src/xdraw2.inc.S
+@@ -41,13 +41,18 @@
+ 
+ .file "xdraw2.inc"
+ 
+-#ifdef GL_AMD3D
+-	
++#ifndef GR_FIFO_WRITE_MACRO
++#define GR_FIFO_WRITE_MACRO
+ .MACRO	GR_FIFO_WRITE __addr __offset __data
+ 	mov \__data , \__offset(\__addr)
+ .ENDM 	/*  GR_FIFO_WRITE */
++#endif
+ 
++#ifdef GL_AMD3D
++	
+ 
++#ifndef MM1_FIFO_MACROS
++#define MM1_FIFO_MACROS
+ .MACRO  WRITE_MM1_FIFO_ALIGNED
+ 	movq %mm1 , (%ebp)	/*  store current param | previous param */
+ .ENDM 	/*  WRITE_MM1_FIFO_ALIGNED */
+@@ -55,6 +60,7 @@
+ .MACRO  WRITE_MM1LOW_FIFO
+ 	movd %mm1 , (%ebp)	/*  store current param | previous param */
+ .ENDM 	/*  WRITE_MM1LOW_FIFO */
++#endif
+ 
+ #define gc %edi	/*  points to graphics context */
+ #define fifo %ebp	/*  points to fifo entries */
+@@ -1103,10 +1109,6 @@ LOCAL(Area_Computation):
+ #define packCol %edi
+ #define tempVal %edi
+ 
+-.MACRO  GR_FIFO_WRITE __addr __offset __data
+-	mov \__data , \__offset(\__addr)
+-.ENDM 	/*  GR_FIFO_WRITE */
+-
+ .align 4
+ LOCAL(__triBegin):
+ 	mov fifoPtr(gc) , fifo	/*  Fetch Fifo Ptr */
+--- GlideV3.orig/glide2x/h3/glide/tests/display.c
++++ GlideV3/glide2x/h3/glide/tests/display.c
+@@ -65,6 +65,10 @@ static const char *sourceFormatString[] 
+     "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ int main( int argc, char **argv)
+ {
+@@ -91,11 +95,6 @@ int main( int argc, char **argv)
+     static FxU32 imageWidth;
+     static FxU32 imageHeight;
+ 
+-    static void imageConvert( void *dst, 
+-                              void *src,
+-                              GrLfbSrcFmt_t format, 
+-                              FxU32 *bpp );
+-
+     srcfname[0] = 0;
+     dstfname[0] = 0;
+ 
+--- GlideV3.orig/glide2x/h3/glide/tests/test26.c
++++ GlideV3/glide2x/h3/glide/tests/test26.c
+@@ -57,6 +57,10 @@ static const char *sourceFormatString[] 
+   "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ int main( int argc, char **argv) {
+   char match; 
+@@ -80,11 +84,6 @@ int main( int argc, char **argv) {
+   static FxU32 imageWidth;
+   static FxU32 imageHeight;
+ 
+-  static void imageConvert( void *dst, 
+-                            void *src,
+-                            GrLfbSrcFmt_t format, 
+-                            FxU32 *bpp );
+-
+   /* Process Command Line Arguments */
+   while( (rv = tlGetOpt( argc, argv, "bdnr", &match, &remArgs )) ) {
+     if ( rv == -1 ) {
+--- GlideV3.orig/glide2x/sst1/glide/tests/display.c
++++ GlideV3/glide2x/sst1/glide/tests/display.c
+@@ -70,6 +70,10 @@ static const char *sourceFormatString[] 
+     "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ void main( int argc, char **argv) {
+     char match; 
+@@ -95,11 +99,6 @@ void main( int argc, char **argv) {
+     static FxU32 imageWidth;
+     static FxU32 imageHeight;
+ 
+-    static void imageConvert( void *dst, 
+-                              void *src,
+-                              GrLfbSrcFmt_t format, 
+-                              FxU32 *bpp );
+-
+     srcfname[0] = 0;
+     dstfname[0] = 0;
+ 
+--- GlideV3.orig/glide2x/sst1/glide/tests/test26.c
++++ GlideV3/glide2x/sst1/glide/tests/test26.c
+@@ -62,6 +62,10 @@ static const char *sourceFormatString[] 
+   "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ void main( int argc, char **argv) {
+   char match; 
+@@ -85,11 +89,6 @@ void main( int argc, char **argv) {
+   static FxU32 imageWidth;
+   static FxU32 imageHeight;
+ 
+-  static void imageConvert( void *dst, 
+-                            void *src,
+-                            GrLfbSrcFmt_t format, 
+-                            FxU32 *bpp );
+-
+   /* Process Command Line Arguments */
+   while( rv = tlGetOpt( argc, argv, "bdnr", &match, &remArgs ) ) {
+     if ( rv == -1 ) {
+--- GlideV3.orig/glide3x/cvg/glide3/tests/display.c
++++ GlideV3/glide3x/cvg/glide3/tests/display.c
+@@ -56,6 +56,10 @@ static const char *sourceFormatString[] 
+     "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ void main( int argc, char **argv) {
+     char match; 
+@@ -81,11 +85,6 @@ void main( int argc, char **argv) {
+     static FxU32 imageWidth;
+     static FxU32 imageHeight;
+ 
+-    static void imageConvert( void *dst, 
+-                              void *src,
+-                              GrLfbSrcFmt_t format, 
+-                              FxU32 *bpp );
+-
+     srcfname[0] = 0;
+     dstfname[0] = 0;
+ 
+--- GlideV3.orig/glide3x/cvg/glide3/tests/test26.c
++++ GlideV3/glide3x/cvg/glide3/tests/test26.c
+@@ -48,6 +48,10 @@ static const char *sourceFormatString[] 
+     "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ void main( int argc, char **argv) {
+     char match; 
+@@ -69,11 +73,6 @@ void main( int argc, char **argv) {
+     static FxU32 imageWidth;
+     static FxU32 imageHeight;
+ 
+-    static void imageConvert( void *dst, 
+-                              void *src,
+-                              GrLfbSrcFmt_t format, 
+-                              FxU32 *bpp );
+-
+     /* Initialize Glide */
+     grGlideInit();
+     assert( hwconfig = tlVoodooType() );
+--- GlideV3.orig/glide3x/h3/glide3/tests/display.c
++++ GlideV3/glide3x/h3/glide3/tests/display.c
+@@ -56,6 +56,10 @@ static const char *sourceFormatString[] 
+     "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ void main( int argc, char **argv) {
+     char match; 
+@@ -81,11 +85,6 @@ void main( int argc, char **argv) {
+     static FxU32 imageWidth;
+     static FxU32 imageHeight;
+ 
+-    static void imageConvert( void *dst, 
+-                              void *src,
+-                              GrLfbSrcFmt_t format, 
+-                              FxU32 *bpp );
+-
+     srcfname[0] = 0;
+     dstfname[0] = 0;
+ 
+--- GlideV3.orig/glide3x/h3/glide3/tests/test26.c
++++ GlideV3/glide3x/h3/glide3/tests/test26.c
+@@ -48,6 +48,10 @@ static const char *sourceFormatString[] 
+     "GR_LFB_SRC_FMT_ZA16      "
+ };
+ 
++static void imageConvert( void *dst,
++                          void *src,
++                          GrLfbSrcFmt_t format,
++                          FxU32 *bpp );
+ 
+ void main( int argc, char **argv) {
+     char match; 
+@@ -69,11 +73,6 @@ void main( int argc, char **argv) {
+     static FxU32 imageWidth;
+     static FxU32 imageHeight;
+ 
+-    static void imageConvert( void *dst, 
+-                              void *src,
+-                              GrLfbSrcFmt_t format, 
+-                              FxU32 *bpp );
+-
+     /* Initialize Glide */
+     grGlideInit();
+     assert( hwconfig = tlVoodooType() );
+--- GlideV3.orig/glide3x/h3/glide3/src/xdraw2.inc.S
++++ GlideV3/glide3x/h3/glide3/src/xdraw2.inc.S
+@@ -59,6 +59,8 @@
+ .file "xdraw2.inc.S"
+ 
+ 
++#ifndef XDRAW2_FIFO_MACROS
++#define XDRAW2_FIFO_MACROS
+ .macro GR_FIFO_WRITE __addr __offset __data
+ 	mov \__data , \__offset(\__addr)
+ .endm	/*  GR_FIFO_WRITE */
+@@ -72,6 +74,7 @@
+ .macro WRITE_MM1LOW_FIFO 
+ 	movd %mm1 , (%ebp)	/*  store current param | previous param */
+ .endm	/*  WRITE_MM1LOW_FIFO */
++#endif
+ 
+ 
+ #if 0
+@@ -815,9 +818,12 @@ LOCAL(nocull):
+ #define packCol %edi
+ #define tempVal %edi
+ 
++#ifndef XDRAW2_FIFO_MACROS
++#define XDRAW2_FIFO_MACROS
+ .macro GR_FIFO_WRITE __addr __offset __data
+ 	mov \__data , \__offset(\__addr)
+ .endm	/*  GR_FIFO_WRITE */
++#endif
+ 
+ .align 4
+ LOCAL(__triBegin):
+--- GlideV3.orig/glide3x/h3/glide3/src/gaa.c
++++ GlideV3/glide3x/h3/glide3/src/gaa.c
+@@ -616,7 +616,7 @@ _grAADrawPoints(FxI32 mode, FxI32 count,
+       e = pointers;
+       if (mode)
+         e = *(float **)e;
+-      (float *)pointers += stride;
++      pointers = (float *)pointers + stride;
+       
+       ptX = FARRAY(e, gc->state.vData.vertexInfo.offset);
+       ptY = FARRAY(e, gc->state.vData.vertexInfo.offset+4);
+@@ -717,7 +717,7 @@ _grAADrawPoints(FxI32 mode, FxI32 count,
+       if (mode)
+         e = *(float **)e;
+       oow = 1.0f / FARRAY(e, gc->state.vData.wInfo.offset);        
+-      (float *)pointers += stride;
++      pointers = (float *)pointers + stride;
+       
+       ptX = FARRAY(e, gc->state.vData.vertexInfo.offset)
+         *oow*gc->state.Viewport.hwidth+gc->state.Viewport.ox;
+@@ -842,9 +842,9 @@ _grAADrawLineStrip(FxI32 mode, FxI32 lty
+         v1 = *(float **)v1;
+         v2 = *(float **)v2;
+       }
+-      (float *)pointers += stride;
++      pointers = (float *)pointers + stride;
+       if (ltype == GR_LINES)
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+       
+       /* draw from low Y to high Y */
+       if (FARRAY(v2, gc->state.vData.vertexInfo.offset+4) < FARRAY(v1, gc->state.vData.vertexInfo.offset+4)) {
+@@ -1023,9 +1023,9 @@ _grAADrawLineStrip(FxI32 mode, FxI32 lty
+           v1 = *(float **)v1;
+           v2 = *(float **)v2;
+         }
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+         if (ltype == GR_LINES)
+-          (float *)pointers += stride;
++          pointers = (float *)pointers + stride;
+         owa = oowa = 1.0f / FARRAY(v1, gc->state.vData.wInfo.offset);
+         owb = oowb = 1.0f / FARRAY(v2, gc->state.vData.wInfo.offset);
+       }
+@@ -1037,7 +1037,7 @@ _grAADrawLineStrip(FxI32 mode, FxI32 lty
+           v1 = *(float **)v1;
+           v2 = *(float **)v2;
+         }
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+         owb = oowb = 1.0f / FARRAY(v2, gc->state.vData.wInfo.offset);
+       }
+       
+@@ -1373,7 +1373,7 @@ _grAADrawTriangles(FxI32 mode, FxI32 tty
+       b = *(float **)b;
+       c = *(float **)c;
+     }
+-    (float *)pointers += stride*3;
++    pointers = (float *)pointers + stride*3;
+ 
+     /* move culling test to here */
+     {
+@@ -1549,7 +1549,7 @@ _grAAVpDrawTriangles(FxI32 mode, FxI32 t
+       b = *(float **)b;
+       c = *(float **)c;
+     }
+-    (float *)pointers += stride*3;
++    pointers = (float *)pointers + stride*3;
+     oowa = 1.0f / FARRAY(a, gc->state.vData.wInfo.offset);        
+     oowb = 1.0f / FARRAY(b, gc->state.vData.wInfo.offset);        
+     oowc = 1.0f / FARRAY(c, gc->state.vData.wInfo.offset);        
+@@ -1716,7 +1716,7 @@ _grAADrawVertexList(FxU32 type, FxI32 mo
+   if (type == kSetupFan) {
+     v[0] = (mode == 0) ? pointers : *(float **)pointers;
+     while (sCount--) {
+-      (float *)pointers += stride;
++      pointers = (float *)pointers + stride;
+       if (mode) {
+         v[1] = *(float **)pointers;
+         v[2] = *((float **)pointers+1);
+@@ -1758,7 +1758,7 @@ _grAADrawVertexList(FxU32 type, FxI32 mo
+         _grAADrawTriangles(1, type, 3, v);
+       else
+         _grAAVpDrawTriangles(1, type, 3, v);    
+-      (float *)pointers += stride;
++      pointers = (float *)pointers + stride;
+       flip = ~flip;
+     }
+     flip = ~flip;
+--- GlideV3.orig/glide3x/h3/glide3/src/gdraw.c
++++ GlideV3/glide3x/h3/glide3/src/gdraw.c
+@@ -402,7 +402,7 @@ _grDrawPoints(FxI32 mode, FxI32 count, v
+         vPtr = pointers;
+         if (mode) vPtr = *(float **)vPtr;
+         
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+         
+         GDBG_INFO_MORE(gc->myLevel, "(%f %f)\n",  
+                        FARRAY(vPtr,gc->state.vData.vertexInfo.offset), 
+@@ -491,7 +491,7 @@ _grDrawPoints(FxI32 mode, FxI32 count, v
+         if (mode)
+           vPtr = *(float **)vPtr;
+         oow = 1.0f / FARRAY(vPtr, gc->state.vData.wInfo.offset);        
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+         
+         {
+           FxU32 x, y;
+@@ -616,9 +616,9 @@ _grDrawLineStrip(FxI32 mode, FxI32 ltype
+           a = *(float **)a;
+           b = *(float **)b;
+         }
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+         if (ltype == GR_LINES)
+-          (float *)pointers += stride;
++          pointers = (float *)pointers + stride;
+         
+         /*
+         ** compute absolute deltas and draw from low Y to high Y
+@@ -778,10 +778,10 @@ _grDrawLineStrip(FxI32 mode, FxI32 ltype
+             a = *(float **)a;
+             b = *(float **)b;
+           }
+-          (float *)pointers += stride;
++          pointers = (float *)pointers + stride;
+           owa = oowa = 1.0f / FARRAY(a, gc->state.vData.wInfo.offset);        
+           owb = oowb = 1.0f / FARRAY(b, gc->state.vData.wInfo.offset);        
+-          (float *)pointers += stride;
++          pointers = (float *)pointers + stride;
+         }
+         else {
+           owa = oowa = oowb;
+@@ -791,7 +791,7 @@ _grDrawLineStrip(FxI32 mode, FxI32 ltype
+             a = *(float **)a;
+             b = *(float **)b;
+           }
+-          (float *)pointers += stride;
++          pointers = (float *)pointers + stride;
+           owb = oowb = 1.0f / FARRAY(b, gc->state.vData.wInfo.offset);
+         }
+         fay = tmp1 = FARRAY(a, gc->state.vData.vertexInfo.offset+4)
+@@ -944,7 +944,7 @@ _grDrawTriangles_Default(FxI32 mode, FxI
+         vPtr = pointers;
+         if (mode)
+           vPtr = *(float **)vPtr;
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+         
+         i = gc->tsuDataList[dataElem];
+         
+@@ -984,7 +984,7 @@ _grDrawTriangles_Default(FxI32 mode, FxI
+                  *oow*gc->state.Viewport.hwidth + gc->state.Viewport.ox);
+         TRI_SETF(FARRAY(vPtr, 4)
+                  *oow*gc->state.Viewport.hheight + gc->state.Viewport.oy);
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+         
+         TRI_VP_SETFS(vPtr,oow);
+       }
+--- GlideV3.orig/glide3x/h3/glide3/src/gstrip.c
++++ GlideV3/glide3x/h3/glide3/src/gstrip.c
+@@ -190,7 +190,7 @@ _grDrawVertexList(FxU32 pktype, FxU32 ty
+         vPtr = pointers;
+         if (mode)
+           vPtr = *(float **)vPtr;
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+         
+         TRI_SETF(FARRAY(vPtr, 0));
+         dataElem = 0;
+@@ -230,7 +230,7 @@ _grDrawVertexList(FxU32 pktype, FxU32 ty
+                  *oow*gc->state.Viewport.hwidth + gc->state.Viewport.ox);
+         TRI_SETF(FARRAY(vPtr, 4)
+                  *oow*gc->state.Viewport.hheight + gc->state.Viewport.oy);
+-        (float *)pointers += stride;
++        pointers = (float *)pointers + stride;
+ 
+         TRI_VP_SETFS(vPtr, oow);
+       }
+--- GlideV3.orig/glide3x/h3/glide3/src/distrip.c
++++ GlideV3/glide3x/h3/glide3/src/distrip.c
+@@ -450,7 +450,7 @@ GR_DIENTRY(grDrawVertexArray, void , (Fx
+     else {
+       while ((int)Count >= 3) {
+         grDrawTriangle(*(float **)pointers, *((float **)pointers+1), *((float **)pointers+2));
+-        (float *)pointers += 3;
++        pointers = (float *)pointers + 3;
+         Count -= 3;
+       }
+     }
+--- GlideV3/glide3x/h3/glide3/tests/test31.c.orig	2000-03-20 22:51:03.000000000 +0100
++++ GlideV3/glide3x/h3/glide3/tests/test31.c	2012-01-09 20:07:05.590126450 +0100
+@@ -307,12 +307,12 @@
+         packedrgb = !packedrgb;
+         if (packedrgb) {
+           grVertexLayout(GR_PARAM_PARGB,   GR_VERTEX_R_OFFSET << 2, GR_PARAM_ENABLE);
+-          (FxU32)vtxList[0].r = 0xff0000ff;
+-          (FxU32)vtxList[1].r = 0xff00ff00;
+-          (FxU32)vtxList[2].r = 0xffff0000;
+-          (FxU32)vtxList[3].r = 0xffff0000;
+-          (FxU32)vtxList[4].r = 0xff00ff00;
+-          (FxU32)vtxList[5].r = 0xff0000ff;
++          *(FxU32*)&vtxList[0].r = 0xff0000ff;
++          *(FxU32*)&vtxList[1].r = 0xff00ff00;
++          *(FxU32*)&vtxList[2].r = 0xffff0000;
++          *(FxU32*)&vtxList[3].r = 0xffff0000;
++          *(FxU32*)&vtxList[4].r = 0xff00ff00;
++          *(FxU32*)&vtxList[5].r = 0xff0000ff;
+         }
+         else {
+           grVertexLayout(GR_PARAM_RGB, GR_VERTEX_R_OFFSET << 2, GR_PARAM_ENABLE);
+--- GlideV3/glide3x/h3/glide3/tests/test32.c.orig	2000-03-20 22:51:03.000000000 +0100
++++ GlideV3/glide3x/h3/glide3/tests/test32.c	2012-01-09 20:10:00.906798986 +0100
+@@ -449,10 +449,10 @@
+         packedrgb = !packedrgb;
+         if (packedrgb) {
+           grVertexLayout(GR_PARAM_PARGB,   GR_VERTEX_R_OFFSET << 2, GR_PARAM_ENABLE);
+-          (FxU32)srcVerts[0].r = 0xff0000ff;
+-          (FxU32)srcVerts[1].r = 0xff00ff00;
+-          (FxU32)srcVerts[2].r = 0xffff0000;
+-          (FxU32)srcVerts[3].r = 0xffff0000;
++          *(FxU32*)&srcVerts[0].r = 0xff0000ff;
++          *(FxU32*)&srcVerts[1].r = 0xff00ff00;
++          *(FxU32*)&srcVerts[2].r = 0xffff0000;
++          *(FxU32*)&srcVerts[3].r = 0xffff0000;
+         }
+         else {
+           grVertexLayout(GR_PARAM_RGB, GR_VERTEX_R_OFFSET << 2, GR_PARAM_ENABLE);
+--- GlideV3/glide3x/h3/glide3/tests/sbench.c.orig	2000-03-20 22:51:03.000000000 +0100
++++ GlideV3/glide3x/h3/glide3/tests/sbench.c	2012-01-09 20:31:44.550175970 +0100
+@@ -281,11 +281,11 @@
+                               0.5f, 0.5f);
+ 
+           if (packedrgb) {
+-            (FxU32) vPtrArray[v][GR_VERTEX_R_OFFSET] =
++            *(FxU32*) &vPtrArray[v][GR_VERTEX_R_OFFSET] =
+               ((unsigned char) (vPtrArray[v][GR_VERTEX_R_OFFSET]) << 16) |
+               ((unsigned char) (vPtrArray[v][GR_VERTEX_G_OFFSET]) << 8) |
+               ((unsigned char) (vPtrArray[v][GR_VERTEX_B_OFFSET]));
+-            (FxU32) vPtrArray[v][GR_VERTEX_R_OFFSET] |= 0xff000000;
++            *(FxU32*) &vPtrArray[v][GR_VERTEX_R_OFFSET] |= 0xff000000;
+           }
+         }
+       } else { /* listType == GR_TRIANGLE_FAN */
+@@ -356,11 +356,11 @@
+             vPtrArray[v][GR_VERTEX_A_OFFSET] = 255.f;
+           }
+           if (packedrgb) {
+-            (FxU32) vPtrArray[v][GR_VERTEX_R_OFFSET] =
++            *(FxU32*) &vPtrArray[v][GR_VERTEX_R_OFFSET] =
+               ((unsigned char) (vPtrArray[v][GR_VERTEX_R_OFFSET]) << 16) |
+               ((unsigned char) (vPtrArray[v][GR_VERTEX_G_OFFSET]) << 8) |
+               ((unsigned char) (vPtrArray[v][GR_VERTEX_B_OFFSET]));
+-            (FxU32) vPtrArray[v][GR_VERTEX_R_OFFSET] |= 0xff000000;
++            *(FxU32*) &vPtrArray[v][GR_VERTEX_R_OFFSET] |= 0xff000000;
+           }
+         }
+ #endif
