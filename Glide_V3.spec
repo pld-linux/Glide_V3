@@ -167,7 +167,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc glide_license.txt
+%doc README.glide2x README.glide3x glide_license.txt
 %attr(755,root,root) %{_bindir}/texus
 %attr(755,root,root) %{_bindir}/test3Dfx
 %attr(755,root,root) %{_bindir}/testGlide3x
