@@ -28,20 +28,39 @@ niskopoziomowym API do dostępu do sprzętu Voodoo firmy 3Dfx
 Interactive. Ta wersja Glide obsługuje akceleratory 3D oparte na
 Voodoo Banshee i Voodoo3.
 
-%package -n Glide_SDK
+%package -n Glide2x_SDK
 Summary:	Development libraries for Glide 2.x
 Summary(pl.UTF-8):	Część Glide 2.x przeznaczona dla programistów
 Group:		Development/Libraries
+Conflicts:	Glide_SDK
 
-%description -n Glide_SDK
+%description -n Glide2x_SDK
 This package includes the header files, documentation, and test files
 necessary for developing applications that use any of the 3D
-accelerators in the 3Dfx Interactive Voodoo line.
+accelerators in the 3Dfx Interactive Voodoo line utilizing Glide 2.x
+interface.
 
-%description -n Glide_SDK -l pl.UTF-8
+%description -n Glide2x_SDK -l pl.UTF-8
 Ten pakiet zawiera pliki nagłówkowe, dokumentację i pliki testowe
 potrzebne do tworzenia aplikacji korzystających z akceleratorów 3D
-serii 3Dfx Interactive Voodoo.
+serii 3Dfx Interactive Voodoo przy użyciu interfejsu Glide 2.x.
+
+%package -n Glide3x_SDK
+Summary:	Development libraries for Glide 3.x
+Summary(pl.UTF-8):	Część Glide 3.x przeznaczona dla programistów
+Group:		Development/Libraries
+Conflicts:	Glide_SDK
+
+%description -n Glide3x_SDK
+This package includes the header files, documentation, and test files
+necessary for developing applications that use any of the 3D
+accelerators in the 3Dfx Interactive Voodoo line utilizing Glide 3.x
+interface.
+
+%description -n Glide3x_SDK -l pl.UTF-8
+Ten pakiet zawiera pliki nagłówkowe, dokumentację i pliki testowe
+potrzebne do tworzenia aplikacji korzystających z akceleratorów 3D
+serii 3Dfx Interactive Voodoo przy użyciu interfejsu Glide 3.x.
 
 %prep
 %setup -q -n GlideV3
@@ -184,10 +203,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libtexus.so.1
 %attr(755,root,root) %{_libdir}/libtexus.so
 
-%files -n Glide_SDK
+%files -n Glide2x_SDK
 %defattr(644,root,root,755)
-%doc docs2x/*.pdf docs3x/*.pdf
+%doc docs2x/*.pdf
 %{_includedir}/glide
-%{_includedir}/glide3
 %{_examplesdir}/glide2x-%{version}
+
+%files -n Glide3x_SDK
+%defattr(644,root,root,755)
+%doc docs3x/*.pdf
+%{_includedir}/glide3
 %{_examplesdir}/glide3x-%{version}
