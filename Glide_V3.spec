@@ -80,9 +80,7 @@ ln glide3x/README README.glide3x
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_includedir}/{glide,glide3}} \
-	$RPM_BUILD_ROOT%{_examplesdir}/{glide2x,glide3x}-%{version}/tests \
-	$RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/{lib,cmd,examples}
+install -d $RPM_BUILD_ROOT{%{_libdir},%{_bindir}}
 
 ######################################################################
 # Install the Glide2x libraries
@@ -95,8 +93,8 @@ install glide2x/h3/lib/libglide.so.2.60 $RPM_BUILD_ROOT%{_libdir}
 ln -sf libglide.so.2 $RPM_BUILD_ROOT%{_libdir}/libglide.so
 
 # Create a compatibility link for the old name
-ln -sf libglide.so.2.60 $RPM_BUILD_ROOT%{_libdir}/libglide2x.so.2
-ln -sf libglide.so.2 $RPM_BUILD_ROOT%{_libdir}/libglide2x.so
+# (X driver used to dlopen by libglide2x.so name)
+ln -sf libglide.so.2.60 $RPM_BUILD_ROOT%{_libdir}/libglide2x.so
 
 ######################################################################
 # Install the Glide3X libraries
@@ -107,8 +105,8 @@ install glide3x/h3/lib/libglide3.so.3.10 $RPM_BUILD_ROOT%{_libdir}
 ln -sf libglide3.so.3 $RPM_BUILD_ROOT%{_libdir}/libglide3.so
 
 # Create a compatibility link for the old name
-ln -sf libglide3.so.3.10 $RPM_BUILD_ROOT%{_libdir}/libglide3x.so.3
-ln -sf libglide3.so.3 $RPM_BUILD_ROOT%{_libdir}/libglide3x.so
+# (X driver used to dlopen by libglide3x.so name)
+ln -sf libglide3.so.3.10 $RPM_BUILD_ROOT%{_libdir}/libglide3x.so
 
 ######################################################################
 # Install Texus
@@ -128,6 +126,9 @@ install glide3x/h3/glide3/tests/test00 $RPM_BUILD_ROOT%{_bindir}/testGlide3x
 # Install the Glide2x SDK material
 ######################################################################
 
+install -d $RPM_BUILD_ROOT%{_includedir}/{glide,glide3}} \
+	$RPM_BUILD_ROOT%{_examplesdir}/{glide2x-%{version}/{tests,texus/examples},glide3x-%{version}/tests}
+
 # Install the headers
 install swlibs/include/3dfx.h $RPM_BUILD_ROOT%{_includedir}/glide
 install swlibs/include/linutil.h $RPM_BUILD_ROOT%{_includedir}/glide
@@ -145,14 +146,8 @@ install glide2x/h3/glide/tests/test??.c $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%
 install glide2x/h3/glide/tests/tldata.inc $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/tests
 install glide2x/h3/glide/tests/tlib.[ch] $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/tests
 
-# Install the Texus source
-install swlibs/texus/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/makefile
-install swlibs/texus/lib/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/lib/makefile
-install swlibs/texus/cmd/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/cmd/makefile
+# Install the Texus examples
 install swlibs/texus/examples/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/examples/makefile
-install swlibs/texus/lib/*.c $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/lib
-install swlibs/texus/lib/texusint.h $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/lib
-install swlibs/texus/cmd/*.c $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/cmd
 install swlibs/texus/examples/*.c $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/examples
 
 ######################################################################
@@ -193,12 +188,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libglide.so.2
 %attr(755,root,root) %{_libdir}/libglide.so
 %attr(755,root,root) %{_libdir}/libglide2x.so
-%attr(755,root,root) %{_libdir}/libglide2x.so.2
 %attr(755,root,root) %{_libdir}/libglide3.so.3.10
 %attr(755,root,root) %ghost %{_libdir}/libglide3.so.3
 %attr(755,root,root) %{_libdir}/libglide3.so
 %attr(755,root,root) %{_libdir}/libglide3x.so
-%attr(755,root,root) %{_libdir}/libglide3x.so.3
 %attr(755,root,root) %{_libdir}/libtexus.so.1.1
 %attr(755,root,root) %ghost %{_libdir}/libtexus.so.1
 %attr(755,root,root) %{_libdir}/libtexus.so
