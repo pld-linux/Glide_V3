@@ -126,7 +126,7 @@ install glide3x/h3/glide3/tests/test00 $RPM_BUILD_ROOT%{_bindir}/testGlide3x
 # Install the Glide2x SDK material
 ######################################################################
 
-install -d $RPM_BUILD_ROOT%{_includedir}/{glide,glide3}} \
+install -d $RPM_BUILD_ROOT%{_includedir}/{glide,glide3} \
 	$RPM_BUILD_ROOT%{_examplesdir}/{glide2x-%{version}/{tests,texus/examples},glide3x-%{version}/tests}
 
 # Install the headers
