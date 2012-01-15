@@ -1,3 +1,8 @@
+#
+# Conditional build:
+%bcond_without	glide2_sdk	# don't build glide2x SDK here
+%bcond_with	glide3_sdk	# build glide3x SDK here (normally built from Glide_V5-DRI.spec)
+#
 Summary:	Glide runtime for 3Dfx Voodoo Banshee and Voodoo3 boards
 Summary(pl.UTF-8):	Środowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
 Name:		Glide_V3
@@ -27,6 +32,24 @@ Ten pakiet zawiera zarówno Glide2x jak i Glide3x. Glide jest
 niskopoziomowym API do dostępu do sprzętu Voodoo firmy 3Dfx
 Interactive. Ta wersja Glide obsługuje akceleratory 3D oparte na
 Voodoo Banshee i Voodoo3.
+
+%package devel
+Summary:	Development package for Glide 2.x/3.x built for Voodoo Banshee/Voodoo3
+Summary(pl.UTF-8):	Pakiet programistyczny dla Glide 2.x/3.x zbudowanych dla Voodoo Banshee/Voodoo3
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	Glide2x_SDK >= %{version}
+Requires:	Glide3x_SDK >= %{version}
+Provides:	Glide2x-devel = %{version}
+Provides:	Glide3x-devel = %{version}
+
+%description devel
+Development package for Glide 2.x and Glide 3.x built for 3Dfx
+Interactive Voodoo Banshee and Voodoo3 adapters.
+
+%description devel -l pl.UTF-8
+Pakiet programistyczny dla Glide 2.x oraz Glide 3.x zbudowanych dla
+kart 3Dfx Interactive Voodoo Banshee i Voodoo3.
 
 %package -n Glide2x_SDK
 Summary:	Development libraries for Glide 2.x
@@ -125,9 +148,9 @@ install glide3x/h3/glide3/tests/test00 $RPM_BUILD_ROOT%{_bindir}/testGlide3x
 ######################################################################
 # Install the Glide2x SDK material
 ######################################################################
-
-install -d $RPM_BUILD_ROOT%{_includedir}/{glide,glide3} \
-	$RPM_BUILD_ROOT%{_examplesdir}/{glide2x-%{version}/{tests,texus/examples},glide3x-%{version}/tests}
+%if %{with glide2_sdk}
+install -d $RPM_BUILD_ROOT%{_includedir}/glide \
+	$RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/{tests,texus/examples}
 
 # Install the headers
 install swlibs/include/3dfx.h $RPM_BUILD_ROOT%{_includedir}/glide
@@ -149,10 +172,14 @@ install glide2x/h3/glide/tests/tlib.[ch] $RPM_BUILD_ROOT%{_examplesdir}/glide2x-
 # Install the Texus examples
 install swlibs/texus/examples/makefile.distrib $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/examples/makefile
 install swlibs/texus/examples/*.c $RPM_BUILD_ROOT%{_examplesdir}/glide2x-%{version}/texus/examples
+%endif
 
 ######################################################################
 # Install the Glide3x SDK material
 ######################################################################
+%if %{with glide3_sdk}
+install -d $RPM_BUILD_ROOT%{_includedir}/glide3 \
+	$RPM_BUILD_ROOT%{_examplesdir}/glide3x-%{version}/tests
 # Install the headers
 install swlibs/include/3dfx.h $RPM_BUILD_ROOT%{_includedir}/glide3
 install swlibs/include/linutil.h $RPM_BUILD_ROOT%{_includedir}/glide3
@@ -168,6 +195,7 @@ install glide3x/h3/glide3/tests/*.3df $RPM_BUILD_ROOT%{_examplesdir}/glide3x-%{v
 install glide3x/h3/glide3/tests/test??.c $RPM_BUILD_ROOT%{_examplesdir}/glide3x-%{version}/tests
 install glide3x/h3/glide3/tests/tldata.inc $RPM_BUILD_ROOT%{_examplesdir}/glide3x-%{version}/tests
 install glide3x/h3/glide3/tests/tlib.[ch] $RPM_BUILD_ROOT%{_examplesdir}/glide3x-%{version}/tests
+%endif
 
 /sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
 
@@ -186,24 +214,31 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/testGlide2x
 %attr(755,root,root) %{_libdir}/libglide.so.2.60
 %attr(755,root,root) %ghost %{_libdir}/libglide.so.2
-%attr(755,root,root) %{_libdir}/libglide.so
 %attr(755,root,root) %{_libdir}/libglide2x.so
 %attr(755,root,root) %{_libdir}/libglide3.so.3.10
 %attr(755,root,root) %ghost %{_libdir}/libglide3.so.3
-%attr(755,root,root) %{_libdir}/libglide3.so
 %attr(755,root,root) %{_libdir}/libglide3x.so
 %attr(755,root,root) %{_libdir}/libtexus.so.1.1
 %attr(755,root,root) %ghost %{_libdir}/libtexus.so.1
 %attr(755,root,root) %{_libdir}/libtexus.so
 
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libglide.so
+%attr(755,root,root) %{_libdir}/libglide3.so
+
+%if %{with glide2_sdk}
 %files -n Glide2x_SDK
 %defattr(644,root,root,755)
 %doc docs2x/*.pdf
 %{_includedir}/glide
 %{_examplesdir}/glide2x-%{version}
+%endif
 
+%if %{with glide3_sdk}
 %files -n Glide3x_SDK
 %defattr(644,root,root,755)
 %doc docs3x/*.pdf
 %{_includedir}/glide3
 %{_examplesdir}/glide3x-%{version}
+%endif
