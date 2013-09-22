@@ -21,13 +21,15 @@
  #endif /* Compiler specific fence commands */
 --- GlideV3/glide2x/h3/glide/src/makefile.linux.orig	2013-09-22 14:06:56.279556474 +0200
 +++ GlideV3/glide2x/h3/glide/src/makefile.linux	2013-09-22 14:09:47.450846589 +0200
-@@ -129,12 +129,12 @@
+@@ -129,12 +129,14 @@
  ifeq ($(FX_GLIDE_CTRISETUP),1)
  ASMTRISETUP     =
  ATSOPTS         =       -DGLIDE_USE_C_TRISETUP 
 -CFILES          =       gxdraw.c
 +CFILES          =       gxdraw.c xtexdl_def.c
++ASMCPUDTECT     =
  else
++ASMCPUDTECT     =       cpudtect.S
  DSPOPTS         +=      -DGLIDE_DISPATCH_SETUP=1 -DGLIDE_PACKED_RGB=0
  
  ifeq ($(GL_AMD3D),)
@@ -41,7 +43,7 @@
  LAOPTS          =       $(DBGOPTS) $(DSPOPTS) $(OPTOPTS)
  
 -AFILES          =       $(ASMTRISETUP) cpudtect.S
-+AFILES          =       $(ASMTRISETUP)
++AFILES          =       $(ASMTRISETUP) $(ASMCPUDTECT)
  
  # sources
  HEADERS         =       glide.h gump.h glidesys.h glideutl.h
