@@ -7,7 +7,7 @@ Summary:	Glide runtime for 3Dfx Voodoo Banshee and Voodoo3 boards
 Summary(pl.UTF-8):	Środowisko Glide dla kart 3Dfx Voodoo Banschee i Voodoo3
 Name:		Glide_V3
 Version:	2.60
-Release:	17
+Release:	18
 License:	3DFX GLIDE Source Code General Public License
 Group:		Libraries
 Source0:	GlideV3.tar.gz
