@@ -1,0 +1,138 @@
+--- GlideV3/glide2x/h3/glide/src/fxglide.h.orig	2013-09-22 13:04:59.430129466 +0200
++++ GlideV3/glide2x/h3/glide/src/fxglide.h	2013-09-22 13:10:55.626683027 +0200
+@@ -1329,6 +1329,18 @@
+ #define P6FENCE __eieio()
+ #elif defined(__GNUC__) && defined(__i386__)
+ #define P6FENCE asm("xchg %%eax, %0" : : "m" (_GlideRoot.p6Fencer) : "eax");
++#elif defined(__ia64__)
++#define P6FENCE asm volatile ("mf.a" ::: "memory");
++#elif defined(__alpha__)
++# define P6FENCE asm volatile("mb" ::: "memory");
++#elif defined(__powerpc__)
++# define P6FENCE asm volatile ("sync" ::: "memory");
++#elif defined (__x86_64__)
++# define P6FENCE asm volatile("mfence" ::: "memory");
++#elif defined(__sparc64__)
++# define P6FENCE asm volatile("membar #LoadLoad | #LoadStore | #StoreStore | #StoreLoad" ::: "memory");
++#elif defined(__sparc__)
++# define P6FENCE asm volatile("" ::: "memory");
+ #else
+ #error "P6 Fencing in-line assembler code needs to be added for this compiler"
+ #endif /* Compiler specific fence commands */
+--- GlideV3/glide2x/h3/glide/src/makefile.linux.orig	2013-09-22 14:06:56.279556474 +0200
++++ GlideV3/glide2x/h3/glide/src/makefile.linux	2013-09-22 14:09:47.450846589 +0200
+@@ -129,12 +129,12 @@
+ ifeq ($(FX_GLIDE_CTRISETUP),1)
+ ASMTRISETUP     =
+ ATSOPTS         =       -DGLIDE_USE_C_TRISETUP 
+-CFILES          =       gxdraw.c
++CFILES          =       gxdraw.c xtexdl_def.c
+ else
+ DSPOPTS         +=      -DGLIDE_DISPATCH_SETUP=1 -DGLIDE_PACKED_RGB=0
+ 
+ ifeq ($(GL_AMD3D),)
+-ASMTRISETUP     =       xdraw2.S
++ASMTRISETUP     =       xdraw2.S cpudtect.S
+ else
+ LIBOBJS		+=	xdraw2_def.o xdraw2_3dnow.o
+ endif #GL_AMD3D
+@@ -185,7 +185,7 @@
+ LAINCS          =       -I$(BUILD_ROOT)/$(FX_GLIDE_HW)/include
+ LAOPTS          =       $(DBGOPTS) $(DSPOPTS) $(OPTOPTS)
+ 
+-AFILES          =       $(ASMTRISETUP) cpudtect.S
++AFILES          =       $(ASMTRISETUP)
+ 
+ # sources
+ HEADERS         =       glide.h gump.h glidesys.h glideutl.h
+--- GlideV3/glide2x/h3/glide/src/gpci.c.orig	2000-03-20 22:51:02.000000000 +0100
++++ GlideV3/glide2x/h3/glide/src/gpci.c	2013-09-22 16:43:44.783550030 +0200
+@@ -966,7 +966,13 @@
+ 
+   /* Setup the basic proc tables based on the cpu type. */
+   {
+-    _GlideRoot.CPUType = GLIDE_GETENV("FX_CPU", _cpu_detect_asm() );
++    _GlideRoot.CPUType = GLIDE_GETENV("FX_CPU",
++#ifdef __i386__
++	_cpu_detect_asm()
++#else
++	0
++#endif
++	);
+     GDBG_INFO(80,"\tcpu: %d\n",_GlideRoot.CPUType);
+       
+     /* Default case */
+--- GlideV3/glide2x/h3/glide/src/diglide.c.orig	2000-03-20 22:51:02.000000000 +0100
++++ GlideV3/glide2x/h3/glide/src/diglide.c	2013-09-22 16:48:14.702762083 +0200
+@@ -291,7 +291,9 @@
+     break;
+ 
+   case GR_HINT_FPUPRECISION:
++#ifdef __i386__
+     hints ? double_precision_asm() : single_precision_asm();
++#endif
+     break;
+ 
+   case GR_HINT_ALLOW_MIPMAP_DITHER:
+--- GlideV3/glide3x/h3/glide3/src/fxglide.h.orig	2013-09-22 16:52:18.240748150 +0200
++++ GlideV3/glide3x/h3/glide3/src/fxglide.h	2013-09-22 16:53:06.216311355 +0200
+@@ -1475,6 +1475,18 @@
+ #  define P6FENCE __eieio()
+ #elif defined(__GNUC__) && defined(__i386__)
+ #define P6FENCE asm("xchg %%eax, %0" : : "m" (_GlideRoot.p6Fencer) : "eax");
++#elif defined(__ia64__)
++#define P6FENCE asm volatile ("mf.a" ::: "memory");
++#elif defined(__alpha__)
++# define P6FENCE asm volatile("mb" ::: "memory");
++#elif defined(__powerpc__)
++# define P6FENCE asm volatile ("sync" ::: "memory");
++#elif defined (__x86_64__)
++# define P6FENCE asm volatile("mfence" ::: "memory");
++#elif defined(__sparc64__)
++# define P6FENCE asm volatile("membar #LoadLoad | #LoadStore | #StoreStore | #StoreLoad" ::: "memory");
++#elif defined(__sparc__)
++# define P6FENCE asm volatile("" ::: "memory");
+ #else  /* !defined ( P6FENCE ) */
+ #  error "P6 Fencing code needs to be added for this compiler"
+ #endif /* !defined ( P6FENCE ) */
+--- GlideV3/glide3x/h3/glide3/src/makefile.linux.orig	2000-03-20 22:51:03.000000000 +0100
++++ GlideV3/glide3x/h3/glide3/src/makefile.linux	2013-09-22 16:59:00.126094039 +0200
+@@ -128,10 +128,11 @@
+ # this makefile from Chris's sst1 glide2x tree.
+ ifeq ($(FX_GLIDE_CTRISETUP),1)
+ ASMTRISETUP     =
++ASMCPUDTECT	=
+ ATSOPTS         =       -DGLIDE_USE_C_TRISETUP 
+ CFILES          +=      gxdraw.c
+ else
+-
++ASMCPUDTECT	=	cpudtect.S
+ # There are now special build rules to get specialized
+ # function versions of the functions taht these files
+ # originally contained. See the end of the file.
+@@ -179,7 +180,7 @@
+ LAINCS          =       -I$(BUILD_ROOT)/$(FX_GLIDE_HW)/include
+ LAOPTS          =       $(DBGOPTS) $(DSPOPTS) $(OPTOPTS)
+ 
+-AFILES          =       $(ASMTRISETUP) cpudtect.S
++AFILES          =       $(ASMTRISETUP) $(ASMCPUDTECT)
+ 
+ # sources
+ HEADERS         =       glide.h glidesys.h glideutl.h
+--- GlideV3/glide3x/h3/glide3/src/gpci.c.orig	2000-03-20 22:51:03.000000000 +0100
++++ GlideV3/glide3x/h3/glide3/src/gpci.c	2013-09-22 17:02:02.101218508 +0200
+@@ -898,7 +898,13 @@
+   _GlideRoot.environment.gammaG = GLIDE_FGETENV("SSTH3_GGAMMA", -1.f);
+   _GlideRoot.environment.gammaB = GLIDE_FGETENV("SSTH3_BGAMMA", -1.f);
+ 
+-  _GlideRoot.CPUType                       = GLIDE_GETENV("FX_CPU", _cpu_detect_asm() );    
++  _GlideRoot.CPUType                       = GLIDE_GETENV("FX_CPU",
++#ifdef __i386__
++      _cpu_detect_asm()
++#else
++      0
++#endif
++      );    
+   GDBG_INFO(0,"               cpu: 0x%x\n",_GlideRoot.CPUType);
+ 
+   /* Setup the basic proc tables based on the cpu type. */

@@ -15,6 +15,9 @@ Source0:	GlideV3.tar.gz
 Patch0:		glide-gcc4.patch
 Patch1:		glide-cpp.patch
 Patch2:		glide-link.patch
+Patch3:		glide-format.patch
+Patch4:		glide-morearchs.patch
+Patch5:		glide-include.patch
 URL:		http://glide.sourceforge.net/
 %ifarch %{ix86}
 BuildRequires:	/usr/bin/gasp
@@ -90,6 +93,9 @@ serii 3Dfx Interactive Voodoo przy użyciu interfejsu Glide 3.x.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 chmod +x swlibs/include/make/ostype
 
 ln glide2x/README README.glide2x
@@ -99,7 +105,11 @@ ln glide3x/README README.glide3x
 %{__make} V3_NODRI \
 	CC="%{__cc}" \
 	CNODEBUG="%{rpmcflags} %{!?debug:-fomit-frame-pointer}\
-		%{!?debug:-funroll-loops -fexpensive-optimizations -ffast-math -DBIG_OPT}"
+		%{!?debug:-funroll-loops -fexpensive-optimizations -ffast-math -DBIG_OPT}" \
+%ifnarch %{ix86}
+	FX_GLIDE_CTRISETUP=1 \
+	GL_AMD3D=
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
